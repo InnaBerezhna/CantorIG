@@ -1,0 +1,6 @@
+---
+include:
+  - board: blackpill_f401ce//zmk
+    shield: cantor_left
+  - board: blackpill_f401ce//zmk
+    shield: cantor_right

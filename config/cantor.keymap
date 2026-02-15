@@ -1,0 +1,160 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Cantor keymap – identical to the Corne 5-col layout (Colemak-DH).
+ * Bluetooth bindings replaced with &none (wired keyboard).
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+&mt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;
+};
+
+// ╭──────────────────────────────────────────────────────╮
+// │  Layer Definitions                                   │
+// ╰──────────────────────────────────────────────────────╯
+#define BASE     0
+#define LOWER    1
+#define ARROW    2
+#define SETTINGS 3
+#define ARROW_STAY 4
+
+
+/ {
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        // ╭──────────────────────────────────────────────────────╮
+        // │  Layer 0: BASE  (Colemak-DH)                        │
+        // ╰──────────────────────────────────────────────────────╯
+        default_layer {
+            display-name = "Base";
+            bindings = <
+        // ╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────────┬──────────┬──────────┬──────────┬──────────────────╮
+        // │  Q       │  W       │  F / '   │  P       │  B / #   │   │  J / *       │  L       │  U / "   │  Y       │  ; / `           │
+             &kp Q      &kp W      &mt SQT F  &kp P      &mt LA(N3) B   &mt ASTRK J    &kp L      &mt DQT U  &kp Y      &hm GRAVE SEMI
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────┼──────────┼──────────┼──────────────────┤
+        // │  A       │  R       │  S / Alt │  T / Cmd │  G → L2  │   │  M           │  N       │  E       │  I       │  O               │
+             &kp A      &kp R      &hm LALT S &hm LGUI T &lt 2 G        &kp M          &kp N      &kp E      &kp I      &kp O
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────┼──────────┼──────────┼──────────────────┤
+        // │  X       │  C       │  D       │  V       │  Z → L3  │   │  K           │  H       │  , / -   │  . / !   │  / / _           │
+             &kp X      &kp C      &kp D      &kp V      &lt 3 Z        &kp K          &kp H      &mt MINUS COMMA &mt EXCL DOT &mt UNDERSCORE FSLH
+        // ╰──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────┼──────────┼──────────┴──────────────────╯
+        //                       │  Ctrl    │  Shift   │ Spc /Cmd │   │  Return      │  Bksp    │  → L1    │
+                                   &kp LCTRL  &kp LSHIFT &mt LGUI SPACE &kp RET        &kp BSPC   &to 1
+        //                       ╰──────────┴──────────┴──────────╯   ╰──────────────┴──────────┴──────────╯
+            >;
+        };
+
+        // ╭──────────────────────────────────────────────────────╮
+        // │  Layer 1: LOWER  (Numbers + Media)                  │
+        // ╰──────────────────────────────────────────────────────╯
+        lower_layer {
+            display-name = "Lower";
+            bindings = <
+        // ╭──────────────┬──────────────┬──────────────┬──────────────┬──────────────╮   ╭──────────┬──────────┬──────────┬──────────┬──────────╮
+        // │  Esc         │  none        │   \          │  /           │  -           │   │  =       │  7       │  8       │  9       │  (       │
+             &kp ESC        &none          &kp BSLH       &kp FSLH       &kp MINUS          &kp EQUAL  &kp N7     &kp N8     &kp N9     &kp LPAR
+        // ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
+        // │  Tab         │  none        │  none        │  none        │  none        │   │  .       │  4       │  5       │  6       │  )       │
+             &kp TAB        &none          &none          &none          &none              &kp DOT    &kp N4     &kp N5     &kp N6     &kp RPAR
+        // ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────┼──────────┼──────────┼──────────┼──────────┤
+        // │  Shift       │  none        │  none        │  *           │  +           │   │  0       │  1       │  2       │  3       │  ^       │
+             &kp LSHIFT     &none          &none          &kp ASTRK      &kp PLUS           &kp N0     &kp N1     &kp N2     &kp N3     &kp CARET
+        // ╰──────────────┴──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────┼──────────┼──────────┼──────────┴──────────╯
+        //                               │  → BASE      │  Alt         │ Spc / Cmd    │   │  Return  │  Bksp    │  none       │
+                                           &to 0          &kp LALT       &mt LGUI SPACE     &kp RET    &kp BSPC   &none
+        //                               ╰──────────────┴──────────────┴──────────────╯   ╰──────────┴──────────┴──────────╯
+            >;
+        };
+
+
+        // ╭──────────────────────────────────────────────────────╮
+        // │  Layer 2: ARROW  (Quick Arrows via G hold)          │
+        // ╰──────────────────────────────────────────────────────╯
+        arrow_layer {
+            display-name = "Arrows";
+            bindings = <
+        // ╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────────┬──────────────┬──────────────┬──────────────┬──────────╮
+        // │  Esc     │  trans   │  F2      │  F12   │  trans   │   │  £           │  none        │  Up          │  none        │       $    │
+             &kp ESC    &trans     &kp F2     &kp F12    &trans         &kp HASH          &none          &kp UP_ARROW   &none          &kp DLLR
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┼──────────┤
+        // │  trans   │  trans   │  trans   │  trans   │  trans   │   │  none        │  Left        │  Down        │  Right       │  Page Up    │
+             &trans     &trans     &trans     &trans     &trans         &none          &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &kp PG_UP
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┼──────────┤
+        // │   [      │   ]      │  trans   │  trans   │  trans   │   │     @        │  &           │  %           │  |          │  Page Down    │
+             &kp LBKT   &kp RBKT    &trans     &trans     &trans         &kp AT         &kp AMPS       &kp PRCNT      &kp PIPE      &kp PG_DN
+        // ╰──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┴──────────╯
+        //                       │  Ctrl  │   shift  │  trans   │    │  Tab         │  Delete      │  → ARROW_STAY  │
+                                     &kp LCTRL  &kp LSHIFT    &trans         &kp TAB        &kp DEL        &to 4
+        //                       ╰──────────┴──────────┴──────────╯   ╰──────────────┴──────────────┴──────────────╯
+            >;
+        };
+
+        // ╭──────────────────────────────────────────────────────╮
+        // │  Layer 3: SETTINGS  (Media – no BT on wired board)  │
+        // ╰──────────────────────────────────────────────────────╯
+        settings_layer {
+            display-name = "Settings";
+            bindings = <
+        // ╭──────────────┬──────────────┬──────────────┬──────────────┬──────────────╮   ╭──────────────┬──────────┬──────────┬──────────────┬──────────────╮
+        // │  none        │  none        │  none        │  none        │  none        │   │  none        │  none    │  none    │  none        │  none        │
+             &none          &none          &none          &none          &none              &none          &none      &none      &none          &none
+        // ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────────┼──────────┼──────────┼──────────────┼──────────────┤
+        // │  none        │  none        │  none        │  none        │  none        │   │  none        │  none    │  none    │  none        │  none        │
+             &none          &none          &none          &none          &none              &none          &none      &none      &none          &none
+        // ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────────┼──────────┼──────────┼──────────────┼──────────────┤
+        // │  none        │  none        │  none        │  none        │  none        │   │  none        │  none    │  none    │  none        │  none        │
+             &none          &none          &none          &none          &none              &none          &none      &none      &none          &none
+        // ╰──────────────┴──────────────┼──────────────┼──────────────┼──────────────┤   ├──────────────┼──────────┼──────────┼──────────────┴──────────────╯
+        //                               │  Bright +    │  Bright -    │  none        │   │  Play/Pause  │ Vol Down │ Vol Up   │
+                                          &kp C_BRI_INC  &kp C_BRI_DEC   &none              &kp C_PP &kp C_VOL_DN &kp C_VOL_UP
+        //                               ╰──────────────┴──────────────┴──────────────╯   ╰──────────────┴──────────┴──────────╯
+            >;
+        };
+
+        // ╭──────────────────────────────────────────────────────╮
+        // │  Layer 4: ARROW_STAY  (Persistent Arrows)           │
+        // ╰──────────────────────────────────────────────────────╯
+        arrow_stay_layer {
+            display-name = "Arrows";
+            bindings = <
+        // ╭──────────┬──────────┬──────────┬──────────┬──────────╮   ╭──────────────┬──────────────┬──────────────┬──────────────┬──────────╮
+        // │  Esc     │  trans   │  F2      │  F12   │  trans   │   │  none        │  none        │  Up          │  none        │       none    │
+             &kp ESC    &trans     &kp F2     &kp F12    &trans         &none          &none          &kp UP_ARROW   &none          &none
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┼──────────┤
+        // │  trans   │  trans   │  trans   │  trans   │  BASE    │   │  none        │  Left        │  Down        │  Right       │  Page Up    │
+             &trans     &trans     &trans     &trans     &to 0         &none          &kp LEFT_ARROW &kp DOWN_ARROW &kp RIGHT_ARROW &kp PG_UP
+        // ├──────────┼──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┼──────────┤
+        // │   none   │   none   │  trans   │  trans   │  trans   │   │     none       │  none        │  none        │  none        │  Page Down    │
+             &none      &none      &trans     &trans     &trans         &none         &none         &none         &none         &kp PG_DN
+        // ╰──────────┴──────────┼──────────┼──────────┼──────────┤   ├──────────────┼──────────────┼──────────────┼──────────────┴──────────╯
+        //                       │  Ctrl  │   shift  │  trans   │   │  Tab         │  Delete      │  none      │
+                                   &kp LCTRL  &kp LSHIFT    &trans         &kp TAB        &kp DEL        &none
+        //                       ╰──────────┴──────────┴──────────╯   ╰──────────────┴──────────────┴──────────────╯
+            >;
+        };
+    };
+
+
+};

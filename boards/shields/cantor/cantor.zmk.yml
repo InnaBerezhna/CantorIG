@@ -1,0 +1,9 @@
+file_format: "2"
+id: cantor
+name: Cantor
+type: shield
+url: https://github.com/diepala/cantor
+requires: [blackpill]
+siblings:
+  - cantor_left
+  - cantor_right
