@@ -12,6 +12,16 @@
 
 #include "cantor.dtsi"
 
+/*
+ * Disable peripherals whose default pins conflict with Cantor GPIOs:
+ *   - I2C1 uses PB8/PB9 → conflicts with kscan row-1 keys
+ *   - TIM4/PWM4 uses PB6/PB7 → conflicts with USART1 wired split
+ *   - SPI1 uses PA5/PA6/PA7 → conflicts with kscan row-2 keys
+ */
+&i2c1 { status = "disabled"; };
+&timers4 { status = "disabled"; };
+&spi1 { status = "disabled"; };
+
 /* Remap USART1 to PB6/PB7 (Cantor wiring) and enable for wired split */
 &usart1 {
     pinctrl-0 = <&usart1_tx_pb6 &usart1_rx_pb7>;
