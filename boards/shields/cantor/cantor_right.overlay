@@ -1,11 +1,9 @@
 /*
  * Cantor right half – peripheral side (connects to left half via TRRS).
  *
- * Direct-pin mapping from the Cantor QMK config (right half, mirrored):
- *   Row 0: B13  B14  B15  A8   B10  B1    (inner → outer)
- *   Row 1: A15  B3   B4   B5   B8   B9
- *   Row 2: B0   A7   A6   A5   A4   A3
- *   Thumb: A0   A1   A2
+ * Same GPIO pin order as the left half (same PCB, just flipped).
+ * The col-offset=<21> shifts columns to 21-41, and the matrix transform
+ * reverses the column order to handle the physical mirroring.
  *
  * Split communication: USART1 full-duplex on PB6 (TX) / PB7 (RX).
  */
@@ -30,6 +28,11 @@
     current-speed = <115200>;
 };
 
+/* Shift right-half column indices by 21 so they don't overlap with left */
+&five_col_transform {
+    col-offset = <21>;
+};
+
 / {
     wired_split {
         compatible = "zmk,wired-split";
@@ -40,27 +43,27 @@
         compatible = "zmk,kscan-gpio-direct";
         wakeup-source;
         input-gpios =
-            <&gpiob 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* row 0 col 0 (inner) */
-            , <&gpiob 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 1 */
-            , <&gpiob 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 2 */
-            , <&gpioa 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 3 */
-            , <&gpiob 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 4 */
-            , <&gpiob 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 5 (outer) */
-            , <&gpioa 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 0 */
-            , <&gpiob 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 1 */
-            , <&gpiob 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 2 */
-            , <&gpiob 5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 3 */
-            , <&gpiob 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 4 */
-            , <&gpiob 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 5 */
-            , <&gpiob 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 0 */
-            , <&gpioa 7  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 1 */
-            , <&gpioa 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 2 */
-            , <&gpioa 5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 3 */
-            , <&gpioa 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 4 */
-            , <&gpioa 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 5 */
-            , <&gpioa 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* thumb 0 */
+            <&gpiob 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* row 0 col 0 (outer) */
+            , <&gpiob 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 1 */
+            , <&gpioa 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 2 */
+            , <&gpiob 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 3 */
+            , <&gpiob 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 4 */
+            , <&gpiob 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 0 col 5 (inner) */
+            , <&gpiob 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 0 */
+            , <&gpiob 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 1 */
+            , <&gpiob 5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 2 */
+            , <&gpiob 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 3 */
+            , <&gpiob 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 4 */
+            , <&gpioa 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 1 col 5 */
+            , <&gpioa 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 0 */
+            , <&gpioa 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 1 */
+            , <&gpioa 5  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 2 */
+            , <&gpioa 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 3 */
+            , <&gpioa 7  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 4 */
+            , <&gpiob 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* row 2 col 5 */
+            , <&gpioa 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* thumb 0 */
             , <&gpioa 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* thumb 1 */
-            , <&gpioa 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* thumb 2 */
+            , <&gpioa 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)> /* thumb 2 */
         ;
     };
 };
